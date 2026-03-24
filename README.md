@@ -12,4 +12,3 @@ A Java application for managing train consists, including locomotives and bogies
 - Java
 - IntelliJ IDEA
 
-## Project Structure

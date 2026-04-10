@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TrainApp {
 
@@ -125,6 +126,19 @@ public class TrainApp {
 
         System.out.println("Passenger bogies sorted by capacity:");
         for (Bogie bogie : passengerBogieObjects) {
+            System.out.println(bogie);
+        }
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC8: Filter Bogies by Capacity using Stream API
+        System.out.println("=== UC8: Filter Passenger Bogies by Capacity (Stream API) ===");
+        List<Bogie> filteredBogies = passengerBogieObjects.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+
+        System.out.println("Passenger bogies with capacity greater than 60:");
+        for (Bogie bogie : filteredBogies) {
             System.out.println(bogie);
         }
 

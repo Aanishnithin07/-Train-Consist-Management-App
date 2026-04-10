@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.HashMap;
@@ -372,6 +373,16 @@ public class TrainApp {
             System.out.print(capacity + " ");
         }
         System.out.println();
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC17: Sort bogie type names alphabetically using Arrays.sort()
+        System.out.println("=== UC17: Sort Bogie Type Names with Arrays.sort() ===");
+        String[] bogieTypeNames = {"Sleeper", "First Class", "AC Chair", "Pantry", "Cargo"};
+
+        Arrays.sort(bogieTypeNames);
+
+        System.out.println("Sorted bogie type names: " + Arrays.toString(bogieTypeNames));
 
         System.out.println("\nAll use cases executed successfully.");
     }

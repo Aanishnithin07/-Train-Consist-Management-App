@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TrainApp {
 
@@ -152,6 +154,41 @@ public class TrainApp {
         System.out.println("Grouped bogies:");
         for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
             System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC10: Aggregate Seating Capacity using Stream Reduction
+        System.out.println("=== UC10: Total Seating Capacity (Stream Reduction) ===");
+        int totalSeatingCapacity = passengerBogieObjects.stream()
+                .map(b -> b.getCapacity())
+                .reduce(0, Integer::sum);
+
+        System.out.println("Total seating capacity across passenger bogies: " + totalSeatingCapacity);
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC11: Validate Train ID and Cargo Code using Regular Expressions
+        System.out.println("=== UC11: Validate Train ID and Cargo Code (Regex) ===");
+        String trainIdInput = "TRN-1234";
+        String cargoCodeInput = "PET-AB";
+
+        Pattern trainIdPattern = Pattern.compile("TRN-\\d{4}");
+        Pattern cargoCodePattern = Pattern.compile("PET-[A-Z]{2}");
+
+        Matcher trainIdMatcher = trainIdPattern.matcher(trainIdInput);
+        Matcher cargoCodeMatcher = cargoCodePattern.matcher(cargoCodeInput);
+
+        if (trainIdMatcher.matches()) {
+            System.out.println("Train ID is valid: " + trainIdInput);
+        } else {
+            System.out.println("Train ID is invalid: " + trainIdInput);
+        }
+
+        if (cargoCodeMatcher.matches()) {
+            System.out.println("Cargo Code is valid: " + cargoCodeInput);
+        } else {
+            System.out.println("Cargo Code is invalid: " + cargoCodeInput);
         }
 
         System.out.println("\nAll use cases executed successfully.");

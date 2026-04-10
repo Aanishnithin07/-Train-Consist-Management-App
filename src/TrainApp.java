@@ -3,11 +3,36 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TrainApp {
+
+    // Represents a passenger bogie with a class name and seating capacity.
+    static class Bogie {
+        private final String name;
+        private final int capacity;
+
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return "Bogie: " + name + " | Capacity: " + capacity;
+        }
+    }
 
     // Entry point of the application
     public static void main(String[] args) {
@@ -86,6 +111,23 @@ public class TrainApp {
             System.out.println("Bogie: " + entry.getKey() + " | Capacity: " + entry.getValue());
         }
 
-        System.out.println("\nTrain consist operations complete. Ready for next use case.");
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC7: Sort Bogies by Capacity using Comparator
+        System.out.println("=== UC7: Sort Bogies by Capacity (Comparator) ===");
+        List<Bogie> passengerBogieObjects = new ArrayList<>();
+        passengerBogieObjects.add(new Bogie("Sleeper", 72));
+        passengerBogieObjects.add(new Bogie("AC Chair", 56));
+        passengerBogieObjects.add(new Bogie("First Class", 24));
+
+        // Sort from highest capacity to lowest for planning and reporting.
+        passengerBogieObjects.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
+
+        System.out.println("Passenger bogies sorted by capacity:");
+        for (Bogie bogie : passengerBogieObjects) {
+            System.out.println(bogie);
+        }
+
+        System.out.println("\nAll use cases executed successfully.");
     }
 }

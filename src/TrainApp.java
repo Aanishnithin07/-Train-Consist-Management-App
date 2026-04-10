@@ -142,6 +142,18 @@ public class TrainApp {
             System.out.println(bogie);
         }
 
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC9: Group Bogies by Category using Stream Collectors
+        System.out.println("=== UC9: Group Bogies into Capacity Categories (Stream Collectors) ===");
+        Map<String, List<Bogie>> groupedBogies = passengerBogieObjects.stream()
+                .collect(Collectors.groupingBy(b -> b.getCapacity() > 60 ? "High Capacity" : "Standard Capacity"));
+
+        System.out.println("Grouped bogies:");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+
         System.out.println("\nAll use cases executed successfully.");
     }
 }

@@ -243,6 +243,39 @@ public class TrainApp {
             System.out.println("Train safety compliance status: UNSAFE");
         }
 
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC13: Compare Loop and Stream Performance using nanoTime
+        System.out.println("=== UC13: Loop vs Stream Performance Benchmark ===");
+        List<Bogie> benchmarkBogies = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            benchmarkBogies.add(new Bogie("Sleeper", 72));
+            benchmarkBogies.add(new Bogie("AC Chair", 56));
+            benchmarkBogies.add(new Bogie("First Class", 24));
+        }
+
+        long loopStartTime = System.nanoTime();
+        List<Bogie> loopFilteredBogies = new ArrayList<>();
+        for (Bogie bogie : benchmarkBogies) {
+            if (bogie.getCapacity() > 60) {
+                loopFilteredBogies.add(bogie);
+            }
+        }
+        long loopEndTime = System.nanoTime();
+        long loopElapsedTime = loopEndTime - loopStartTime;
+
+        long streamStartTime = System.nanoTime();
+        List<Bogie> streamFilteredBogies = benchmarkBogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+        long streamEndTime = System.nanoTime();
+        long streamElapsedTime = streamEndTime - streamStartTime;
+
+        System.out.println("Loop-based filtering time (ns): " + loopElapsedTime);
+        System.out.println("Stream-based filtering time (ns): " + streamElapsedTime);
+        System.out.println("Loop filtered bogies count: " + loopFilteredBogies.size());
+        System.out.println("Stream filtered bogies count: " + streamFilteredBogies.size());
+
         System.out.println("\nAll use cases executed successfully.");
     }
 }

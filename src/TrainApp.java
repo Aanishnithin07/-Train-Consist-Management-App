@@ -154,6 +154,16 @@ public class TrainApp {
             System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
 
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC10: Aggregate Seating Capacity using Stream Reduction
+        System.out.println("=== UC10: Total Seating Capacity (Stream Reduction) ===");
+        int totalSeatingCapacity = passengerBogieObjects.stream()
+                .map(b -> b.getCapacity())
+                .reduce(0, Integer::sum);
+
+        System.out.println("Total seating capacity across passenger bogies: " + totalSeatingCapacity);
+
         System.out.println("\nAll use cases executed successfully.");
     }
 }

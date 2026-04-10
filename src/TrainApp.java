@@ -407,6 +407,36 @@ public class TrainApp {
             System.out.println("Bogie ID not found: " + searchKey);
         }
 
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC19: Find bogie ID efficiently using Binary Search on sorted data
+        System.out.println("=== UC19: Binary Search for Bogie ID ===");
+        String[] sortedBogieIds = {"BG101", "BG102", "BG208", "BG305", "BG450"};
+        String binarySearchKey = "BG305";
+        int low = 0;
+        int high = sortedBogieIds.length - 1;
+        int binaryFoundIndex = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            int comparison = binarySearchKey.compareTo(sortedBogieIds[mid]);
+
+            if (comparison == 0) {
+                binaryFoundIndex = mid;
+                break;
+            } else if (comparison < 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        if (binaryFoundIndex != -1) {
+            System.out.println("Bogie ID found: " + binarySearchKey + " at index " + binaryFoundIndex);
+        } else {
+            System.out.println("Bogie ID not found: " + binarySearchKey);
+        }
+
         System.out.println("\nAll use cases executed successfully.");
     }
 }

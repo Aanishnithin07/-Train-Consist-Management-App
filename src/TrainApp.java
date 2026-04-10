@@ -384,6 +384,29 @@ public class TrainApp {
 
         System.out.println("Sorted bogie type names: " + Arrays.toString(bogieTypeNames));
 
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC18: Search bogie ID using Linear Search on unsorted data
+        System.out.println("=== UC18: Linear Search for Bogie ID ===");
+        String[] bogieIds = {"BG305", "BG101", "BG208", "BG450", "BG102"};
+        String searchKey = "BG208";
+        boolean bogieFound = false;
+        int foundAtIndex = -1;
+
+        for (int i = 0; i < bogieIds.length; i++) {
+            if (bogieIds[i].equals(searchKey)) {
+                bogieFound = true;
+                foundAtIndex = i;
+                break;
+            }
+        }
+
+        if (bogieFound) {
+            System.out.println("Bogie ID found: " + searchKey + " at index " + foundAtIndex);
+        } else {
+            System.out.println("Bogie ID not found: " + searchKey);
+        }
+
         System.out.println("\nAll use cases executed successfully.");
     }
 }

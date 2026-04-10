@@ -21,6 +21,13 @@ public class TrainApp {
         }
     }
 
+    // Custom runtime exception for unsafe cargo assignment operations.
+    static class CargoSafetyException extends RuntimeException {
+        CargoSafetyException(String message) {
+            super(message);
+        }
+    }
+
     // Represents a passenger bogie with a class name and seating capacity.
     static class Bogie {
         private final String name;
@@ -52,7 +59,7 @@ public class TrainApp {
     // Represents a goods bogie with bogie type and cargo type.
     static class GoodsBogie {
         private final String type;
-        private final String cargo;
+        private String cargo;
 
         GoodsBogie(String type, String cargo) {
             this.type = type;
@@ -67,9 +74,29 @@ public class TrainApp {
             return cargo;
         }
 
+        public void setCargo(String cargo) {
+            this.cargo = cargo;
+        }
+
         @Override
         public String toString() {
             return "GoodsBogie: " + type + " | Cargo: " + cargo;
+        }
+    }
+
+    static void assignCargoWithSafetyCheck(GoodsBogie goodsBogie, String cargoToAssign) {
+        try {
+            if (goodsBogie.getType().equalsIgnoreCase("Rectangular")
+                    && cargoToAssign.equalsIgnoreCase("Petroleum")) {
+                throw new CargoSafetyException("Petroleum cannot be assigned to a Rectangular bogie.");
+            }
+
+            goodsBogie.setCargo(cargoToAssign);
+            System.out.println("Cargo assignment successful: " + goodsBogie);
+        } catch (CargoSafetyException e) {
+            System.out.println("Cargo assignment failed: " + e.getMessage());
+        } finally {
+            System.out.println("Cargo assignment completed for bogie type: " + goodsBogie.getType());
         }
     }
 
@@ -310,6 +337,19 @@ public class TrainApp {
         }
 
         System.out.println("Passenger bogies added after validation: " + validatedPassengerBogies);
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC15: Safely handle unsafe cargo assignments using try-catch-finally
+        System.out.println("=== UC15: Handle Unsafe Cargo Assignment (try-catch-finally) ===");
+        GoodsBogie assignmentBogie = new GoodsBogie("Rectangular", "Coal");
+        System.out.println("Initial goods bogie: " + assignmentBogie);
+
+        assignCargoWithSafetyCheck(assignmentBogie, "Petroleum");
+        assignCargoWithSafetyCheck(assignmentBogie, "Grain");
+
+        System.out.println("Final goods bogie state: " + assignmentBogie);
+        System.out.println("Application continues safely after cargo assignment attempts.");
 
         System.out.println("\nAll use cases executed successfully.");
     }

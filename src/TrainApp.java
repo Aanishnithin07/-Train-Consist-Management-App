@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.function.Predicate;
 
 public class TrainApp {
 
@@ -34,6 +35,30 @@ public class TrainApp {
         @Override
         public String toString() {
             return "Bogie: " + name + " | Capacity: " + capacity;
+        }
+    }
+
+    // Represents a goods bogie with bogie type and cargo type.
+    static class GoodsBogie {
+        private final String type;
+        private final String cargo;
+
+        GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getCargo() {
+            return cargo;
+        }
+
+        @Override
+        public String toString() {
+            return "GoodsBogie: " + type + " | Cargo: " + cargo;
         }
     }
 
@@ -189,6 +214,33 @@ public class TrainApp {
             System.out.println("Cargo Code is valid: " + cargoCodeInput);
         } else {
             System.out.println("Cargo Code is invalid: " + cargoCodeInput);
+        }
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC12: Enforce Goods Bogie Safety Rules using Functional Interfaces
+        System.out.println("=== UC12: Goods Bogie Safety Validation (Functional Interfaces) ===");
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Rectangular", "Coal"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Rectangular", "Cement"));
+
+        Predicate<GoodsBogie> hasRequiredFields = g ->
+                g.getType() != null && !g.getType().isEmpty()
+                        && g.getCargo() != null && !g.getCargo().isEmpty();
+
+        Predicate<GoodsBogie> cylindricalPetroleumOnly = g ->
+                !g.getType().equalsIgnoreCase("Cylindrical")
+                        || g.getCargo().equalsIgnoreCase("Petroleum");
+
+        boolean isSafetyCompliant = goodsBogies.stream()
+                .allMatch(hasRequiredFields.and(cylindricalPetroleumOnly));
+
+        System.out.println("Goods bogies under validation: " + goodsBogies);
+        if (isSafetyCompliant) {
+            System.out.println("Train safety compliance status: SAFE");
+        } else {
+            System.out.println("Train safety compliance status: UNSAFE");
         }
 
         System.out.println("\nAll use cases executed successfully.");

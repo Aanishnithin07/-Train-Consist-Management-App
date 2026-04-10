@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.function.Predicate;
 
 public class TrainApp {
 
@@ -34,6 +35,30 @@ public class TrainApp {
         @Override
         public String toString() {
             return "Bogie: " + name + " | Capacity: " + capacity;
+        }
+    }
+
+    // Represents a goods bogie with bogie type and cargo type.
+    static class GoodsBogie {
+        private final String type;
+        private final String cargo;
+
+        GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getCargo() {
+            return cargo;
+        }
+
+        @Override
+        public String toString() {
+            return "GoodsBogie: " + type + " | Cargo: " + cargo;
         }
     }
 
@@ -190,6 +215,66 @@ public class TrainApp {
         } else {
             System.out.println("Cargo Code is invalid: " + cargoCodeInput);
         }
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC12: Enforce Goods Bogie Safety Rules using Functional Interfaces
+        System.out.println("=== UC12: Goods Bogie Safety Validation (Functional Interfaces) ===");
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Rectangular", "Coal"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Rectangular", "Cement"));
+
+        Predicate<GoodsBogie> hasRequiredFields = g ->
+                g.getType() != null && !g.getType().isEmpty()
+                        && g.getCargo() != null && !g.getCargo().isEmpty();
+
+        Predicate<GoodsBogie> cylindricalPetroleumOnly = g ->
+                !g.getType().equalsIgnoreCase("Cylindrical")
+                        || g.getCargo().equalsIgnoreCase("Petroleum");
+
+        boolean isSafetyCompliant = goodsBogies.stream()
+                .allMatch(hasRequiredFields.and(cylindricalPetroleumOnly));
+
+        System.out.println("Goods bogies under validation: " + goodsBogies);
+        if (isSafetyCompliant) {
+            System.out.println("Train safety compliance status: SAFE");
+        } else {
+            System.out.println("Train safety compliance status: UNSAFE");
+        }
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC13: Compare Loop and Stream Performance using nanoTime
+        System.out.println("=== UC13: Loop vs Stream Performance Benchmark ===");
+        List<Bogie> benchmarkBogies = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            benchmarkBogies.add(new Bogie("Sleeper", 72));
+            benchmarkBogies.add(new Bogie("AC Chair", 56));
+            benchmarkBogies.add(new Bogie("First Class", 24));
+        }
+
+        long loopStartTime = System.nanoTime();
+        List<Bogie> loopFilteredBogies = new ArrayList<>();
+        for (Bogie bogie : benchmarkBogies) {
+            if (bogie.getCapacity() > 60) {
+                loopFilteredBogies.add(bogie);
+            }
+        }
+        long loopEndTime = System.nanoTime();
+        long loopElapsedTime = loopEndTime - loopStartTime;
+
+        long streamStartTime = System.nanoTime();
+        List<Bogie> streamFilteredBogies = benchmarkBogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+        long streamEndTime = System.nanoTime();
+        long streamElapsedTime = streamEndTime - streamStartTime;
+
+        System.out.println("Loop-based filtering time (ns): " + loopElapsedTime);
+        System.out.println("Stream-based filtering time (ns): " + streamElapsedTime);
+        System.out.println("Loop filtered bogies count: " + loopFilteredBogies.size());
+        System.out.println("Stream filtered bogies count: " + streamFilteredBogies.size());
 
         System.out.println("\nAll use cases executed successfully.");
     }

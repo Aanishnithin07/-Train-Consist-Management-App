@@ -14,12 +14,23 @@ import java.util.function.Predicate;
 
 public class TrainApp {
 
+    // Custom checked exception for invalid passenger bogie capacities.
+    static class InvalidCapacityException extends Exception {
+        InvalidCapacityException(String message) {
+            super(message);
+        }
+    }
+
     // Represents a passenger bogie with a class name and seating capacity.
     static class Bogie {
         private final String name;
         private final int capacity;
 
-        Bogie(String name, int capacity) {
+        Bogie(String name, int capacity) throws InvalidCapacityException {
+            if (capacity <= 0) {
+                throw new InvalidCapacityException(
+                        "Capacity must be greater than zero for bogie " + name + ": " + capacity);
+            }
             this.name = name;
             this.capacity = capacity;
         }
@@ -63,7 +74,7 @@ public class TrainApp {
     }
 
     // Entry point of the application
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidCapacityException {
 
         // UC1: Initialization
         System.out.println("=== Train Consist Management App ===");
@@ -275,6 +286,30 @@ public class TrainApp {
         System.out.println("Stream-based filtering time (ns): " + streamElapsedTime);
         System.out.println("Loop filtered bogies count: " + loopFilteredBogies.size());
         System.out.println("Stream filtered bogies count: " + streamFilteredBogies.size());
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC14: Prevent invalid passenger bogies using custom exception
+        System.out.println("=== UC14: Prevent Invalid Passenger Bogies (Custom Exception) ===");
+        List<Bogie> validatedPassengerBogies = new ArrayList<>();
+
+        try {
+            Bogie validBogie = new Bogie("Sleeper", 72);
+            validatedPassengerBogies.add(validBogie);
+            System.out.println("Passenger bogie created successfully: " + validBogie);
+        } catch (InvalidCapacityException e) {
+            System.out.println("Validation failed: " + e.getMessage());
+        }
+
+        try {
+            Bogie invalidBogie = new Bogie("Faulty Coach", 0);
+            validatedPassengerBogies.add(invalidBogie);
+            System.out.println("Passenger bogie created successfully: " + invalidBogie);
+        } catch (InvalidCapacityException e) {
+            System.out.println("Validation failed: " + e.getMessage());
+        }
+
+        System.out.println("Passenger bogies added after validation: " + validatedPassengerBogies);
 
         System.out.println("\nAll use cases executed successfully.");
     }

@@ -351,6 +351,28 @@ public class TrainApp {
         System.out.println("Final goods bogie state: " + assignmentBogie);
         System.out.println("Application continues safely after cargo assignment attempts.");
 
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC16: Sort passenger capacities using Bubble Sort (no library sort)
+        System.out.println("=== UC16: Bubble Sort Passenger Capacities ===");
+        int[] passengerCapacities = {72, 56, 24, 68, 40};
+
+        for (int i = 0; i < passengerCapacities.length - 1; i++) {
+            for (int j = 0; j < passengerCapacities.length - 1 - i; j++) {
+                if (passengerCapacities[j] > passengerCapacities[j + 1]) {
+                    int temp = passengerCapacities[j];
+                    passengerCapacities[j] = passengerCapacities[j + 1];
+                    passengerCapacities[j + 1] = temp;
+                }
+            }
+        }
+
+        System.out.print("Sorted passenger capacities: ");
+        for (int capacity : passengerCapacities) {
+            System.out.print(capacity + " ");
+        }
+        System.out.println();
+
         System.out.println("\nAll use cases executed successfully.");
     }
 }

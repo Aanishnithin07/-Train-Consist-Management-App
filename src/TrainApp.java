@@ -101,6 +101,19 @@ public class TrainApp {
         }
     }
 
+    static boolean searchBogieIdDefensively(List<String> bogieIds, String searchKey) {
+        if (bogieIds.isEmpty()) {
+            throw new IllegalStateException("Search cannot continue: no bogies available in the train consist.");
+        }
+
+        for (String bogieId : bogieIds) {
+            if (bogieId.equals(searchKey)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Entry point of the application
     public static void main(String[] args) throws InvalidCapacityException {
 
@@ -436,6 +449,22 @@ public class TrainApp {
         } else {
             System.out.println("Bogie ID not found: " + binarySearchKey);
         }
+
+        System.out.println("\nTrain consist operations complete. Ready for next use case.\n");
+
+        // UC20: Fail fast when search is attempted on an empty train consist
+        System.out.println("=== UC20: Defensive Search State Validation ===");
+        List<String> emptyTrainBogieIds = new ArrayList<>();
+        String defensiveSearchKey = "BG101";
+
+        try {
+            boolean exists = searchBogieIdDefensively(emptyTrainBogieIds, defensiveSearchKey);
+            System.out.println("Bogie ID found: " + defensiveSearchKey + " => " + exists);
+        } catch (IllegalStateException e) {
+            System.out.println("Search aborted: " + e.getMessage());
+        }
+
+        System.out.println("Search operation ended safely after defensive validation.");
 
         System.out.println("\nAll use cases executed successfully.");
     }
